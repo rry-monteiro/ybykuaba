@@ -32,7 +32,7 @@ STANDARD_PATHS: set[Path] = {
 }
 
 
-def scan_dir(path: Path) -> list[str]:
+def _scan_dir(path: Path) -> list[str]:
     paths = []
     for root, directories, files in path.walk():
         directories[:] = [
@@ -43,8 +43,8 @@ def scan_dir(path: Path) -> list[str]:
     return paths
 
 
-def collect_archives(paths: set):
+def get_index(paths: set):
     with ThreadPoolExecutor(max_workers=5) as executor:
-        results = executor.map(scan_dir, paths)
+        results = executor.map(_scan_dir, paths)
 
     return [path for paths in results for path in paths]
