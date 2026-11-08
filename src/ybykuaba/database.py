@@ -41,3 +41,18 @@ def sync():
             [(path, Path(path).name) for path in new_files_index],
         )
 
+
+def find_archive(query: str, limit: int = 5) -> list:
+    with sqlite3.connect(DB_PATH) as db:
+        rows = db.execute(
+            """
+            SELECT path FROM files
+            WHERE name LIKE ?
+            ORDER BY length(name)
+            LIMIT ?
+            """,
+            (f"%{query}%", limit),
+        ).fetchall()
+
+    print([row[0] for row in rows])
+    return [row[0] for row in rows]

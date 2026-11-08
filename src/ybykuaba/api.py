@@ -2,6 +2,8 @@ import sys
 
 import webview
 
+from ybykuaba import database
+
 
 class YbykuabaAPI:
     """API de comunicação entre Python e JavaScript"""
@@ -15,7 +17,10 @@ class YbykuabaAPI:
 
     def find_app(self, query: str): ...
 
-    def find_archive(self, query: str): ...
+    def find_archive(self, query: str):
+        result = database.find_archive(query)
+        return result
+
 
     def calculate(self, query: str): ...
 
