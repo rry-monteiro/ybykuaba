@@ -54,5 +54,4 @@ def find_archive(query: str, limit: int = 5) -> list:
             (f"%{query}%", limit),
         ).fetchall()
 
-    print([row[0] for row in rows])
     return [row[0] for row in rows]

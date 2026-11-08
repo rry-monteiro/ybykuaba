@@ -1,3 +1,4 @@
+import subprocess
 import sys
 
 import webview
@@ -21,7 +22,12 @@ class YbykuabaAPI:
         result = database.find_archive(query)
         return result
 
-
     def calculate(self, query: str): ...
 
     def execute(self, query: str): ...
+
+    def open_path(self, path):
+        try:
+            subprocess.Popen(["xdg-open", path])
+        except:
+            subprocess.Popen(["gio", "open", path])
