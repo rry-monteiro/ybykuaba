@@ -7,6 +7,7 @@ from ybykuaba.api import YbykuabaAPI
 UI = Path(__file__).parent / "ui" / "index.html"
 API = YbykuabaAPI()
 
+
 def main():
     webview.create_window(
         title="ybykûaba",
