@@ -1,7 +1,9 @@
+import threading
 from pathlib import Path
 
 import webview
 
+from ybykuaba import database
 from ybykuaba.api import YbykuabaAPI
 
 UI = Path(__file__).parent / "ui" / "index.html"
@@ -21,6 +23,10 @@ def main():
         js_api=API,
     )
     webview.start(gui="qt")
+    # inicializa o banco de dados
+    database.initialize()
+    # faz a sincronização
+    threading.Thread(target=database.sync(), daemon=True).start()
 
 
 if __name__ == "__main__":
