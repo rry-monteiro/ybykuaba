@@ -31,6 +31,8 @@ body {
     border: 3px solid var(--nord8);
 }
 
+/* INPUT */
+
 #busca {
     width: 100%;
     padding: 12px 14px;
@@ -56,43 +58,121 @@ body {
     box-shadow: 4px 4px 0 var(--nord8);
 }
 
+/* RESULTADOS */
+
 #resultados {
-    list-style: none;
-    margin: 18px 0 0;
-    padding: 0;
+    margin-top: 18px;
     max-height: calc(100% - 76px);
     overflow-y: auto;
-    border: 2px solid var(--nord3);
     background: var(--nord1);
+    border: 2px solid var(--nord3);
 }
 
 #resultados:empty {
     display: none;
 }
 
-#resultados li {
+/* LISTAS */
+
+.result-list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+.result-list li {
+    display: flex;
+    align-items: center;
+    gap: 12px;
     padding: 9px 12px;
     color: var(--nord4);
     cursor: pointer;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
     border-bottom: 2px solid var(--nord0);
     border-left: 6px solid transparent;
 }
 
-#resultados li:last-child {
+.result-list li:last-child {
     border-bottom: none;
 }
 
-#resultados li:hover,
-#resultados li.selected {
+.result-list li:hover,
+.result-list li.selected {
     background: var(--nord8);
     color: var(--nord0);
     border-left-color: var(--nord0);
 }
 
-/* scrollbar reta e grossa */
+.result-list li span {
+    flex-shrink: 0;
+}
+
+.result-info {
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+}
+
+.result-info strong {
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.result-info small {
+    color: var(--nord3);
+    font-size: 11px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.result-list li:hover small,
+.result-list li.selected small {
+    color: var(--nord2);
+}
+
+/* CALCULADORA */
+
+.calc-result {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 24px;
+}
+
+.calc-result strong {
+    color: var(--nord8);
+    font-size: 28px;
+    font-weight: 600;
+}
+
+.calc-result.error strong {
+    color: var(--nord11);
+    font-size: 16px;
+}
+
+/* COMANDOS */
+
+.command-result {
+    padding: 12px;
+}
+
+.command-result pre {
+    margin: 0;
+    padding: 12px;
+    background: var(--nord0);
+    border: 2px solid var(--nord3);
+    color: var(--nord4);
+    font: inherit;
+    white-space: pre-wrap;
+    overflow-wrap: anywhere;
+    overflow-x: auto;
+}
+
+.command-result code {
+    font: inherit;
+}
+
+/* SCROLLBAR */
+
 #resultados::-webkit-scrollbar {
     width: 10px;
 }
@@ -105,6 +185,8 @@ body {
 #resultados::-webkit-scrollbar-track {
     background: var(--nord0);
 }
+
+/* SELEÇÃO DE TEXTO */
 
 ::selection {
     background: var(--nord8);
