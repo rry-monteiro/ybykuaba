@@ -3,7 +3,7 @@ from pathlib import Path
 
 from platformdirs import user_data_path
 
-from ybykuaba.core import archives
+from ybykuaba.core import apps, archives
 
 (DB_DIR := user_data_path("ybykuaba")).mkdir(parents=True, exist_ok=True)
 DB_PATH = DB_DIR / "index.db"
@@ -21,8 +21,8 @@ def initialize():
 
             CREATE TABLE IF NOT EXISTS applications (
                 id INTEGER PRIMARY KEY,
-                path TEXT NOT NULL UNIQUE,
-                name TEXT NOT NULL
+                name TEXT NOT NULL,
+                exec TEXT NOT NULL
             );
         """)
 
@@ -30,7 +30,7 @@ def initialize():
 def sync():
     """Sinconiza os aplicativos e arquivos novos com o banco de dados"""
     new_files_index: list[str] = archives.get_index(archives.STANDARD_PATHS)
-    # new_apps:list[str] = apps.get_index(...)
+    new_apps_index: list[tuple] = apps.get_index()
 
     with sqlite3.connect(DB_PATH) as db:
         # deleta tudo de arquivos
@@ -40,9 +40,16 @@ def sync():
             "INSERT INTO files (path, name) VALUES (?, ?)",
             [(path, Path(path).name) for path in new_files_index],
         )
+        # delata tudo dos apps
+        db.execute("DELETE FROM applications")
+        # adiciona tudo novamente
+        db.executemany(
+            "INSERT INTO applications (name, exec) VALUES (?, ?)", new_apps_index
+        )
 
 
-def find_archive(query: str, limit: int = 5) -> list:
+def find_archive(query: str, limit: int = 5) -> list[str]:
+    """busca arquivos e pastas dentro do banco de dados"""
     with sqlite3.connect(DB_PATH) as db:
         rows = db.execute(
             """
@@ -55,3 +62,18 @@ def find_archive(query: str, limit: int = 5) -> list:
         ).fetchall()
 
     return [row[0] for row in rows]
+
+
+def find_application(query: str, limit: int = 5) -> list[tuple[str, str]]:
+    """busca aplicativos dentro do banco de dados"""
+    with sqlite3.connect(DB_PATH) as db:
+        rows = db.execute(
+            """
+            SELECT name, exec FROM applications
+            WHERE name LIKE ?
+            ORDER BY length(name)
+            LIMIT ?
+            """,
+            (f"%{query}%", limit),
+        ).fetchall()
+    return rows
