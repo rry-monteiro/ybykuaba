@@ -1,16 +1,23 @@
 from pathlib import Path
 
 from xdg.BaseDirectory import xdg_data_dirs
+from xdg.DesktopEntry import DesktopEntry
 
 
-def get_desktop_files():
+def _get_desktop_files():
     apps = []
     for directory in xdg_data_dirs:
         applications = Path(directory) / "applications"
-
         if applications.is_dir():
-            apps.extend(applications.rglob("*.desktop"))
+            apps.extend(
+                DesktopEntry(str(path)) for path in applications.rglob("*.desktop")
+            )
     return apps
 
 
-def get_data_desktop(apps: list): ...
+def get_index():
+    index = []
+    desktop_entrys = _get_desktop_files()
+    for app in desktop_entrys:
+        index.append((app.getName(), app.getExec()))
+    return index
