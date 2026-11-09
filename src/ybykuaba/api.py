@@ -29,8 +29,18 @@ class YbykuabaAPI:
     def execute(self, query: str): ...
 
     def open_path(self, path):
-        try:
-            subprocess.Popen(["xdg-open", path])
-        except:
-            subprocess.Popen(["gio", "open", path])
+        commands = [
+                ["xdg-open", path],
+                ["gio", "open", path],
+                ["gnome-open", path],
+                ["kde-open", path]
+            ]
+            
+        for cmd in commands:
+            try:
+                subprocess.Popen(cmd)
+                break  # se executou com sucesso, interrompe o loop
+            except FileNotFoundError:
+                continue
+
 
