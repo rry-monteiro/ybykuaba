@@ -16,7 +16,9 @@ class YbykuabaAPI:
         webview.windows[0].destroy()
         sys.exit()
 
-    def find_app(self, query: str): ...
+    def find_app(self, query: str):
+        result = database.find_application(query)
+        return result
 
     def find_archive(self, query: str):
         result = database.find_archive(query)
@@ -31,3 +33,4 @@ class YbykuabaAPI:
             subprocess.Popen(["xdg-open", path])
         except:
             subprocess.Popen(["gio", "open", path])
+
