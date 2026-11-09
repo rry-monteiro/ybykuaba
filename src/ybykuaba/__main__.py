@@ -18,6 +18,7 @@ def main():
         frameless=True,
         resizable=False,
         min_size=(400, 400),
+        on_top=True,
         width=400,
         height=400,
         js_api=API,
