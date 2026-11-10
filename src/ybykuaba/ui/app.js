@@ -30,44 +30,53 @@ document.addEventListener('keydown', function(event) {
 // detecta o primeiro caractere:
 input.addEventListener("input", (e) => {
     query = e.target.value;
-    // se não temos query, operador = "" e resultado limpo
-    if (!query) { op = ""; clean_result(); return; }
-    if (query.length === 1) {
-        op = get_operation();
-    } else {
-        switch (op) {
-            case "calc":
-                calculate();
-                break;
 
-            case "app":
-                find_app();
-                    break;
+    if (!query) {
+        op = "";
+        clean_result();
+        return;
+    }
 
-            case "archive":
-                find_archives();
-                break;
+    const new_op = get_operation();
 
-            case "command":
-            case "web":
-                clean_result();
-                break;
-        };
-    };
+    // limpa quando mudamos de operação
+    if (new_op !== op) {
+        op = new_op;
+        clean_result();
+    }
+
+    switch (op) {
+        case "calc":
+            calculate();
+            break;
+
+        case "app":
+            find_app();
+            break;
+
+        case "archive":
+            find_archives();
+            break;
+    }
 });
 
 // detecta teclas no input
 input.addEventListener("keydown", (e) => {
-    if (e.key == 'Enter') {
+    if (e.key === "Enter") {
         switch (op) {
-            case "command":
-                exec_command();
+            case "command": {
+                const command = query.slice(1).trim();
+                input.value = ":";
+                query = ":";
+                op = "command";
+                if (command) {
+                    exec_command(command);
+                }
                 break;
-
+            }
             case "web":
-                // serach_web
                 break;
-        };
+        }
     }
 });
 
@@ -121,13 +130,13 @@ async function calculate() {
     result_div.replaceChildren(div);
 }
 
-async function exec_command() {
-    const output = await pywebview.api.execute(query.replace(':',''))
+async function exec_command(command) {
+    const output = await pywebview.api.execute(command);
     const div = document.createElement('div');
     div.className = 'command-result';
     const pre = document.createElement('pre');
     const code = document.createElement('code');
-    code.textContent = output
+    code.textContent = output;
     pre.replaceChildren(code);
     div.replaceChildren(pre);
     result_div.replaceChildren(div);
