@@ -58,15 +58,17 @@ input.addEventListener("input", (e) => {
 
 // detecta teclas no input
 input.addEventListener("keydown", (e) => {
-    switch (op) {
-        case "command":
-            //execute_command
-            break;
+    if (e.key == 'Enter') {
+        switch (op) {
+            case "command":
+                exec_command();
+                break;
 
-        case "web":
-            // serach_web
-            break;
-    };
+            case "web":
+                // serach_web
+                break;
+        };
+    }
 });
 
 async function find_archives() {
@@ -119,5 +121,16 @@ async function calculate() {
     result_div.replaceChildren(div);
 }
 
-function exec_command() { }
+async function exec_command() {
+    const output = await pywebview.api.execute(query.replace(':',''))
+    const div = document.createElement('div');
+    div.className = 'command-result';
+    const pre = document.createElement('pre');
+    const code = document.createElement('code');
+    code.textContent = output
+    pre.replaceChildren(code);
+    div.replaceChildren(pre);
+    result_div.replaceChildren(div);
+}
+
 function search_web() { }

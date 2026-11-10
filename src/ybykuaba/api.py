@@ -6,7 +6,7 @@ import webview
 
 from ybykuaba import database
 
-from .core import calc
+from .core import calc, commands
 
 
 class YbykuabaAPI:
@@ -38,17 +38,19 @@ class YbykuabaAPI:
         res = calc.parse_expression(query)
         return res
 
-    def execute(self, query: str): ...
+    def execute(self, query: str):
+        res = commands.run_command(query)
+        return res
 
     def open_path(self, path):
-        commands = [
+        open_commands = [
             ["xdg-open", path],
             ["gio", "open", path],
             ["gnome-open", path],
             ["kde-open", path],
         ]
 
-        for cmd in commands:
+        for cmd in open_commands:
             try:
                 subprocess.Popen(cmd)
                 break  # se executou com sucesso, interrompe o loop
