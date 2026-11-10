@@ -94,8 +94,8 @@ body {
     padding: 9px 12px;
     color: var(--nord4);
     cursor: pointer;
-    border-bottom: 2px solid var(--nord0);
-    border-left: 6px solid transparent;
+    /* border-bottom: 2px solid var(--nord0); */
+    /* border-left: 0px solid transparent; */
 }
 
 .result-list li:last-child {
