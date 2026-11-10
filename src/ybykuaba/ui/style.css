@@ -111,6 +111,7 @@ body {
 
 .result-list li span {
     flex-shrink: 0;
+    font-size: 24px;
 }
 
 .result-info {
