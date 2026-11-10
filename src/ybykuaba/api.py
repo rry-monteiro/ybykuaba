@@ -1,5 +1,6 @@
 import subprocess
 import sys
+from pathlib import Path
 
 import webview
 
@@ -20,9 +21,17 @@ class YbykuabaAPI:
         result = database.find_application(query)
         return result
 
-    def find_archive(self, query: str):
-        result = database.find_archive(query)
-        return result
+    def find_archive(self, query: str)->list[dict[str,str|bool]]:
+        db_res = database.find_archive(query)
+        res = []
+        for r in db_res:
+            path = Path(r)
+            res.append({
+                "name": path.name,
+                "path": r,
+                "is_dir": path.is_dir()
+            })
+        return res
 
     def calculate(self, query: str): ...
 
