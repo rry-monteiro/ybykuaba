@@ -155,13 +155,14 @@ body {
 
 .calc-result strong {
     color: var(--nord8);
-    font-size: 28px;
+    font-size: 26px;
     font-weight: 600;
 }
 
 .calc-result.error strong {
     color: var(--nord11);
-    font-size: 16px;
+    font-size: 26px;
+    font-weight: 600;
 }
 
 /* COMANDOS */
