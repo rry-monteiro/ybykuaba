@@ -41,8 +41,8 @@ input.addEventListener("input", (e) => {
                 break;
 
             case "app":
-                // buscar app
-                break;
+                find_app()
+                    break;
 
             case "archive":
                 find_archives()
@@ -76,7 +76,7 @@ async function find_archives() {
     // preenche com os dados da API
     ul.innerHTML = archives.map(item => `
         <li>
-            <span>${item.isDir ? '\uf07c' : '\u{f0219}'}</span>
+            <span>${item.is_dir ? '\u{e5fe}' : '\u{f1517}'}</span>
             <div class="result-info">
                 <strong>${item.name}</strong>
                 <small>${item.path}</small>
@@ -85,6 +85,23 @@ async function find_archives() {
     `).join('');
     result_div.replaceChildren(ul);
 }
-function find_app() { }
+
+async function find_app() {
+    let applications = await pywebview.api.find_app(query.replace('.',''))
+    const ul = document.createElement('ul');
+    ul.className = 'result-list';
+    // preenchendo com apps
+    ul.innerHTML = applications.map(app => `
+        <li>
+            <span>\u{f40e}</span>
+            <div class="result-info">
+                <strong>${app.name}</strong>
+                <small>${app.exec}</small>
+            </div>
+        </li>
+    `).join('');
+    result_div.replaceChildren(ul);
+}
+
 function exec_command() { }
 function search_web() { }
