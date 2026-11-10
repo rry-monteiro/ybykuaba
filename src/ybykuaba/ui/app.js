@@ -45,7 +45,7 @@ input.addEventListener("input", (e) => {
                 break;
 
             case "archive":
-                // find_archive
+                find_archives()
                 break;
 
             case "command":
@@ -69,3 +69,22 @@ input.addEventListener("keydown", (e) => {
     };
 });
 
+async function find_archives() {
+    let archives = await pywebview.api.find_archive(query);
+    const ul = document.createElement('ul');
+    ul.className = 'result-list';
+    // preenche com os dados da API
+    ul.innerHTML = archives.map(item => `
+        <li>
+            <span>${item.isDir ? '\uf07c' : '\u{f0219}'}</span>
+            <div class="result-info">
+                <strong>${item.name}</strong>
+                <small>${item.path}</small>
+            </div>
+        </li>
+    `).join('');
+    result_div.replaceChildren(ul);
+}
+function find_app() { }
+function exec_command() { }
+function search_web() { }

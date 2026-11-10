@@ -1,3 +1,10 @@
+@font-face {
+    font-family: 'Martian Nerd';
+    src: url('./fonts/Martian-Medium.ttf') format('truetype');
+    font-weight: normal;
+    font-style: normal;
+}
+
 :root {
     --nord0: #2e3440;
     --nord1: #3b4252;
@@ -25,7 +32,7 @@ body {
     padding: 10px;
     background: var(--nord0);
     color: var(--nord4);
-    font-family: "JetBrains Mono", "Fira Code", ui-monospace, monospace;
+    font-family: "Martian Nerd", monospace;
     font-size: 14px;
     overflow: hidden;
     border: 3px solid var(--nord8);
