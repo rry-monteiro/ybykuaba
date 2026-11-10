@@ -78,6 +78,24 @@ input.addEventListener("keydown", (e) => {
                 break;
         }
     }
+    // pega os resultados da lista
+    const items = result_div.querySelectorAll(".result-list li");
+    // se ta vazio retorna
+    if (!items.length) return;
+    // pegando o selecionado e sua posição
+    const selected = result_div.querySelector(".selected");
+    let index = [...items].indexOf(selected);
+    // seta pra baixo
+    if (e.key === "ArrowDown") {
+        index = (index + 1) % items.length;
+    }
+    // seta pra cima
+    if (e.key === "ArrowUp") {
+        index = (index - 1 + items.length) % items.length;
+    }
+
+    selected?.classList.remove("selected");
+    items[index].classList.add("selected");
 });
 
 async function find_archives() {
