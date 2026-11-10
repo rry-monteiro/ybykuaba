@@ -18,8 +18,14 @@ class YbykuabaAPI:
         sys.exit()
 
     def find_app(self, query: str):
-        result = database.find_application(query)
-        return result
+        db_res = database.find_application(query)
+        res = []
+        for r in db_res:
+            res.append({
+                "name": r[0],
+                "exec": r[1]
+            })
+        return res
 
     def find_archive(self, query: str)->list[dict[str,str|bool]]:
         db_res = database.find_archive(query)
