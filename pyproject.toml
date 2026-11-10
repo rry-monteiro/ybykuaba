@@ -11,6 +11,7 @@ dependencies = [
     "platformdirs>=4.14.5",
     "pywebview[qt]>=6.2.1",
     "pyxdg>=0.28",
+    "sympy>=1.14.0",
 ]
 
 [project.scripts]
