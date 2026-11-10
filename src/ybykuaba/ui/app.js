@@ -104,12 +104,19 @@ async function find_app() {
 }
 
 async function calculate() {
-    let resultado = await pywebview.api.calculate(query.replace('=',''))
-    result_div.innerHTML = `
-    <div class="calc-result">
-        <strong>${resultado}</strong>
-    </div>
-    `
+    const resposta = await pywebview.api.calculate(query.replace('=', ''));
+
+    const div = document.createElement('div');
+    div.className = resposta.sucesso
+        ? 'calc-result'
+        : 'calc-result error';
+
+    const strong = document.createElement('strong');
+    strong.textContent = resposta.resultado;
+
+    div.appendChild(strong);
+
+    result_div.replaceChildren(div);
 }
 
 function exec_command() { }

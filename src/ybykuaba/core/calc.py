@@ -48,15 +48,15 @@ def interpret(tree):
 def parse_expression(query:str):
     try:
         tree = ast.parse(query, mode="eval").body
-        return str(interpret(tree))
-
+        res = {"resultado": str(interpret(tree)), "sucesso":True}
+        return res
         # expressão com xintaxe inválida
     except SyntaxError:
-        return "Syntax Error"
+        return { "resultado":"Syntax Error", "sucesso": False }
         # divisão por zero
     except ZeroDivisionError:
-        return "Division by zero"
-        # expressão nao permitida (ainda bb)
+        return { "resultado":"Division by zero", "sucesso": False }
+        # expressão nao permitida {ainda bb}
     except ValueError:
-        return "Invalid expression"
+        return { "resultado":"Invalid expression", "sucesso": False }
 
