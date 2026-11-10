@@ -6,6 +6,8 @@ import webview
 
 from ybykuaba import database
 
+from .core import calc
+
 
 class YbykuabaAPI:
     """API de comunicação entre Python e JavaScript"""
@@ -32,7 +34,9 @@ class YbykuabaAPI:
             res.append({"name": path.name, "path": r, "is_dir": path.is_dir()})
         return res
 
-    def calculate(self, query: str): ...
+    def calculate(self, query: str):
+        res = calc.parse_expression(query)
+        return res
 
     def execute(self, query: str): ...
 

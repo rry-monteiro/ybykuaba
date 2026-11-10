@@ -37,15 +37,15 @@ input.addEventListener("input", (e) => {
     } else {
         switch (op) {
             case "calc":
-                // calcular
+                calculate();
                 break;
 
             case "app":
-                find_app()
+                find_app();
                     break;
 
             case "archive":
-                find_archives()
+                find_archives();
                 break;
 
             case "command":
@@ -101,6 +101,15 @@ async function find_app() {
         </li>
     `).join('');
     result_div.replaceChildren(ul);
+}
+
+async function calculate() {
+    let resultado = await pywebview.api.calculate(query.replace('=',''))
+    result_div.innerHTML = `
+    <div class="calc-result">
+        <strong>${resultado}</strong>
+    </div>
+    `
 }
 
 function exec_command() { }

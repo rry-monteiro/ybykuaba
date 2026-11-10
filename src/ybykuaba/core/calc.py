@@ -3,7 +3,7 @@ import ast
 import sympy as sp
 
 
-def calculate(tree):
+def interpret(tree):
     """recebe a arvore construida pelo ast e retorna a expressão pelo symnpy"""
     # se for uma constante
     if isinstance(tree, ast.Constant):
@@ -15,8 +15,8 @@ def calculate(tree):
 
     # se for uma operação
     if isinstance(tree, ast.BinOp):
-        left = calculate(tree.left)
-        right = calculate(tree.right)
+        left = interpret(tree.left)
+        right = interpret(tree.right)
 
         match tree.op:
             case ast.Add():
@@ -34,11 +34,29 @@ def calculate(tree):
 
     # se for operação unitária
     if isinstance(tree, ast.UnaryOp):
-        value = calculate(tree.operand)
+        value = interpret(tree.operand)
 
         match tree.op:
             case ast.UAdd():
                 return value
             case ast.USub():
                 return -value
+
+    raise ValueError("Syntax Error")
+
+
+def parse_expression(query:str):
+    try:
+        tree = ast.parse(query, mode="eval").body
+        return str(interpret(tree))
+
+        # expressão com xintaxe inválida
+    except SyntaxError:
+        return "Syntax Error"
+        # divisão por zero
+    except ZeroDivisionError:
+        return "Division by zero"
+        # expressão nao permitida (ainda bb)
+    except ValueError:
+        return "Invalid expression"
 
