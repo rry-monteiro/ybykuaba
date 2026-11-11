@@ -22,7 +22,7 @@ def initialize():
             CREATE TABLE IF NOT EXISTS applications (
                 id INTEGER PRIMARY KEY,
                 name TEXT NOT NULL,
-                exec TEXT NOT NULL
+                bin TEXT NOT NULL
             );
         """)
 
@@ -44,7 +44,7 @@ def sync():
         db.execute("DELETE FROM applications")
         # adiciona tudo novamente
         db.executemany(
-            "INSERT INTO applications (name, exec) VALUES (?, ?)", new_apps_index
+            "INSERT INTO applications (name, bin) VALUES (?, ?)", new_apps_index
         )
 
 
@@ -69,7 +69,7 @@ def find_application(query: str, limit: int = 5) -> list[tuple[str, str]]:
     with sqlite3.connect(DB_PATH) as db:
         rows = db.execute(
             """
-            SELECT name, exec FROM applications
+            SELECT name, bin FROM applications
             WHERE name LIKE ?
             ORDER BY length(name)
             LIMIT ?

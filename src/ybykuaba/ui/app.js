@@ -62,6 +62,14 @@ input.addEventListener("input", (e) => {
 
 // detecta teclas no input
 input.addEventListener("keydown", (e) => {
+    // pega os resultados da lista
+    const items = result_div.querySelectorAll(".result-list li");
+    // se ta vazio retorna
+    if (!items.length) return;
+    // pegando o selecionado e sua posição
+    const selected = result_div.querySelector(".selected");
+    let index = [...items].indexOf(selected);
+    // se for enter
     if (e.key === "Enter") {
         switch (op) {
             case "command": {
@@ -76,15 +84,15 @@ input.addEventListener("keydown", (e) => {
             }
             case "web":
                 break;
+            case "app":
+                pywebview.api.open_app(selected.dataset.open);
+                break;
+            case "archive":
+                pywebview.api.open_path(selected.dataset.open);
+                break;
+
         }
     }
-    // pega os resultados da lista
-    const items = result_div.querySelectorAll(".result-list li");
-    // se ta vazio retorna
-    if (!items.length) return;
-    // pegando o selecionado e sua posição
-    const selected = result_div.querySelector(".selected");
-    let index = [...items].indexOf(selected);
     // seta pra baixo
     if (e.key === "ArrowDown") {
         index = (index + 1) % items.length;
@@ -104,7 +112,7 @@ async function find_archives() {
     ul.className = 'result-list';
     // preenche com os dados da API
     ul.innerHTML = archives.map(item => `
-        <li>
+        <li data-open='${item.path}'>
             <span>${item.is_dir ? '\u{e5fe}' : '\u{f1517}'}</span>
             <div class="result-info">
                 <strong>${item.name}</strong>
@@ -121,11 +129,11 @@ async function find_app() {
     ul.className = 'result-list';
     // preenchendo com apps
     ul.innerHTML = applications.map(app => `
-        <li>
+        <li data-open='${app.bin}' >
             <span>\u{f40e}</span>
             <div class="result-info">
                 <strong>${app.name}</strong>
-                <small>${app.exec}</small>
+                <small>${app.bin}</small>
             </div>
         </li>
     `).join('');

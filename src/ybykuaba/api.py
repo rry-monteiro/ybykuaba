@@ -23,7 +23,7 @@ class YbykuabaAPI:
         db_res = database.find_application(query)
         res = []
         for r in db_res:
-            res.append({"name": r[0], "exec": r[1]})
+            res.append({"name": r[0], "bin": r[1]})
         return res
 
     def find_archive(self, query: str) -> list[dict[str, str | bool]]:
@@ -41,6 +41,9 @@ class YbykuabaAPI:
     def execute(self, query: str):
         res = commands.run_command(query)
         return res
+
+    def open_app(self, app_bin):
+        subprocess.Popen([app_bin], shell=True)
 
     def open_path(self, path):
         open_commands = [

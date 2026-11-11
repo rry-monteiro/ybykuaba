@@ -1,3 +1,4 @@
+import shlex
 from pathlib import Path
 
 from xdg.BaseDirectory import xdg_data_dirs
@@ -19,5 +20,9 @@ def get_index():
     index = []
     desktop_entrys = _get_desktop_files()
     for app in desktop_entrys:
-        index.append((app.getName(), app.getExec()))
+        appbin = shlex.split(str(app.getExec()))[0]
+        index.append((app.getName(),  appbin))
+
+    for i in index:
+        print(i)
     return index
