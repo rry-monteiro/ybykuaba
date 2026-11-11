@@ -3,7 +3,7 @@ import ast
 import sympy as sp
 
 
-def interpret(tree):
+def interpret(tree: ast.AST) -> sp.Expr:
     """recebe a arvore construida pelo ast e retorna a expressão pelo symnpy"""
     # se for uma constante
     if isinstance(tree, ast.Constant):
@@ -42,21 +42,31 @@ def interpret(tree):
             case ast.USub():
                 return -value
 
-    raise ValueError("Syntax Error")
+    # operação inválida / desconhecida
+    raise ValueError()
 
 
-def parse_expression(query:str):
+def parse_expression(query: str):
+    """
+    recebe a query bruta e envia ela pro parser, retorna um dicionário
+    com um erro ou com a expressão resolvida
+    """
     try:
-        tree = ast.parse(query, mode="eval").body
-        res = {"resultado": str(interpret(tree)), "sucesso":True}
+        tree: ast.AST = ast.parse(query, mode="eval").body
+        res: dict[str, str | bool] = {
+            "resultado": str(interpret(tree)),
+            "sucesso": True,
+        }
+        # divisão por zero manual
+        if res["resultado"] == "nan":
+            raise ZeroDivisionError
         return res
         # expressão com xintaxe inválida
     except SyntaxError:
-        return { "resultado":"Syntax Error", "sucesso": False }
+        return {"resultado": "Syntax Error", "sucesso": False}
         # divisão por zero
     except ZeroDivisionError:
-        return { "resultado":"Division by zero", "sucesso": False }
+        return {"resultado": "Division by zero", "sucesso": False}
         # expressão nao permitida {ainda bb}
     except ValueError:
-        return { "resultado":"Invalid expression", "sucesso": False }
-
+        return {"resultado": "Invalid expression", "sucesso": False}
