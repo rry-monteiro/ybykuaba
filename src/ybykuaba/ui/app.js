@@ -61,49 +61,54 @@ input.addEventListener("input", (e) => {
 });
 
 // detecta teclas no input
-input.addEventListener("keydown", (e) => {
-    // pega os resultados da lista
-    const items = result_div.querySelectorAll(".result-list li");
-    // pegando o selecionado e sua posição
-    const selected = result_div.querySelector(".selected");
-    let index = [...items].indexOf(selected);
-    // se for enter
-    if (e.key === "Enter") {
-        switch (op) {
-            case "command": {
-                const command = query.slice(1).trim();
-                input.value = ":";
-                query = ":";
-                op = "command";
-                if (command) {
-                    exec_command(command);
-                }
-                break;
-            }
-            case "web":
-                break;
-            case "app":
-                pywebview.api.open_app(selected.dataset.open);
-                pywebview.api.close();
-                break;
-            case "archive":
-                pywebview.api.open_path(selected.dataset.open);
-                pywebview.api.close();
-                break;
+input.addEventListener("keydown", async (e) => {
 
+    // executar ou abrir com enter
+    if (e.key === "Enter") {
+        // se for comando 
+        if (op === "command") {
+            const command = query.slice(1).trim();
+            // mantem o modo a cada enter
+            input.value = query = ":";
+            // executa ne
+            if (command) exec_command(command);
+        // abrindo arquivo ou app
+        } else if (op === "app" || op === "archive") {
+            const selected = result_div.querySelector(".selected");
+
+            if (selected) {
+                const path = selected.dataset.open;
+                // abre de acordo com a operação
+                if (op === "app") {
+                    await pywebview.api.open_app(path);
+                } else {
+                    await pywebview.api.open_path(path);
+                }
+                // Fecha o launcher depois de abrir o resultado
+                pywebview.api.close();
+            }
         }
     }
-    // seta pra baixo
-    if (e.key === "ArrowDown") {
-        index = (index + 1) % items.length;
-    }
-    // seta pra cima
-    if (e.key === "ArrowUp") {
-        index = (index - 1 + items.length) % items.length;
-    }
 
-    selected?.classList.remove("selected");
-    items[index].classList.add("selected");
+    // setas navegam
+    else if (e.key === "ArrowDown" || e.key === "ArrowUp") {
+        const items = [...result_div.querySelectorAll(".result-list li")];
+
+        // só se existir resultado
+        if (items.length) {
+            e.preventDefault();
+            // pega o resultado selecionado
+            const selected = result_div.querySelector(".selected");
+            const index = items.indexOf(selected);
+            // define se sobe ou desce, se não sobe...só desce
+            const step = e.key === "ArrowDown" ? 1 : -1;
+            ''
+            // remove a seleção anterior
+            selected?.classList.remove("selected");
+            // seleciona o próximo resultado, mantendo a navegação circular
+            items[(index + step + items.length) % items.length].classList.add("selected");
+        }
+    }
 });
 
 async function find_archives() {
@@ -111,15 +116,15 @@ async function find_archives() {
     const ul = document.createElement('ul');
     ul.className = 'result-list';
     // preenche com os dados da API
-    ul.innerHTML = archives.map(item => `
-        <li data-open='${item.path}'>
-            <span>${item.is_dir ? '\u{e5fe}' : '\u{f1517}'}</span>
-            <div class="result-info">
-                <strong>${item.name}</strong>
-                <small>${item.path}</small>
-            </div>
-        </li>
-    `).join('');
+    ul.innerHTML = archives.map((item, i) => `
+    <li data-open='${item.path}' class="${i === 0 ? 'selected' : ''}">
+        <span>${item.is_dir ? '\u{e5fe}' : '\u{f1517}'}</span>
+        <div class="result-info">
+            <strong>${item.name}</strong>
+            <small>${item.path}</small>
+        </div>
+    </li>
+`).join('');
     result_div.replaceChildren(ul);
 }
 
@@ -128,8 +133,8 @@ async function find_app() {
     const ul = document.createElement('ul');
     ul.className = 'result-list';
     // preenchendo com apps
-    ul.innerHTML = applications.map(app => `
-        <li data-open='${app.bin}' >
+    ul.innerHTML = applications.map((app, i) => `
+        <li data-open='${app.bin}' class="${i === 0 ? 'selected' : ''}">
             <span>\u{f40e}</span>
             <div class="result-info">
                 <strong>${app.name}</strong>
@@ -141,7 +146,9 @@ async function find_app() {
 }
 
 async function calculate() {
-    const resposta = await pywebview.api.calculate(query.replace('=', ''));
+    let q = query.replace('=', '')
+
+    const resposta = await pywebview.api.calculate(q);
 
     const div = document.createElement('div');
     div.className = resposta.sucesso
@@ -149,7 +156,9 @@ async function calculate() {
         : 'calc-result error';
 
     const strong = document.createElement('strong');
-    strong.textContent = resposta.resultado;
+
+    // gambiarra pra não aparecer syntax error no primeiro caractere
+    strong.textContent = (q ? resposta.resultado : "");
 
     div.appendChild(strong);
 
