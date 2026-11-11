@@ -40,6 +40,7 @@ class YbykuabaAPI:
 
     def execute(self, query: str):
         res = commands.run_command(query)
+        print(res)
         return res
 
     def open_app(self, app_bin):

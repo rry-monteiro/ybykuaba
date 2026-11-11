@@ -22,7 +22,4 @@ def get_index():
     for app in desktop_entrys:
         appbin = shlex.split(str(app.getExec()))[0]
         index.append((app.getName(),  appbin))
-
-    for i in index:
-        print(i)
     return index

@@ -64,8 +64,6 @@ input.addEventListener("input", (e) => {
 input.addEventListener("keydown", (e) => {
     // pega os resultados da lista
     const items = result_div.querySelectorAll(".result-list li");
-    // se ta vazio retorna
-    if (!items.length) return;
     // pegando o selecionado e sua posição
     const selected = result_div.querySelector(".selected");
     let index = [...items].indexOf(selected);
@@ -86,9 +84,11 @@ input.addEventListener("keydown", (e) => {
                 break;
             case "app":
                 pywebview.api.open_app(selected.dataset.open);
+                pywebview.api.close();
                 break;
             case "archive":
                 pywebview.api.open_path(selected.dataset.open);
+                pywebview.api.close();
                 break;
 
         }
