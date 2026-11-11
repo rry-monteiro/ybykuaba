@@ -7,7 +7,9 @@ def interpret(tree: ast.AST) -> sp.Expr:
     """recebe a arvore construida pelo ast e retorna a expressão pelo symnpy"""
     # se for uma constante
     if isinstance(tree, ast.Constant):
-        return sp.sympify(tree.value)
+        val = sp.sympify(tree.value)
+        assert isinstance(val, sp.Expr)
+        return val
 
     # se for um nome (variãvel, simbolo)
     if isinstance(tree, ast.Name):
