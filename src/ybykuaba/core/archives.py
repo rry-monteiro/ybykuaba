@@ -33,6 +33,10 @@ STANDARD_PATHS: set[Path] = {
 
 
 def _scan_dir(path: Path) -> list[str]:
+    """
+    faz walk em um path e guarda todas as suas passtas e arquivos
+    ignorando os encoontrados nas configurações de busca
+    """
     paths = []
     for root, directories, files in path.walk():
         directories[:] = [
@@ -43,7 +47,10 @@ def _scan_dir(path: Path) -> list[str]:
     return paths
 
 
-def get_index(paths: set):
+def get_index(paths: set) -> list[str]:
+    """
+    entrega o index contendo todos os arquivose pastas dos paths passados à função
+    """
     with ThreadPoolExecutor(max_workers=5) as executor:
         results = executor.map(_scan_dir, paths)
 
