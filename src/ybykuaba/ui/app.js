@@ -87,6 +87,10 @@ input.addEventListener("keydown", async (e) => {
                 // Fecha o launcher depois de abrir o resultado
                 pywebview.api.close();
             }
+        } else if (op === "web") {
+            // busca (o motor é resolvido no python)
+            await pywebview.api.search_web(query.replace('?',''))
+            pywebview.api.close();
         }
     }
 
@@ -176,5 +180,3 @@ async function exec_command(command) {
     div.replaceChildren(pre);
     result_div.replaceChildren(div);
 }
-
-function search_web() { }

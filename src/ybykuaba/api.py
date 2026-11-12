@@ -6,7 +6,7 @@ import webview
 
 from ybykuaba import database
 
-from .core import calc, commands
+from .core import calc, commands, web
 
 
 class YbykuabaAPI:
@@ -39,6 +39,12 @@ class YbykuabaAPI:
             {"name": Path(r).name, "path": r, "is_dir": Path(r).is_dir()}
             for r in db_res
         ]
+
+    def search_web(self, query:str)->None:
+        """
+        envia a pesquisa pra search e abre o navegador, não retorna nada
+        """
+        web.search(query)
 
     def calculate(self, query: str) -> dict[str, str | bool]:
         """
