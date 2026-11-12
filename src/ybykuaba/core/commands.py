@@ -7,10 +7,14 @@ MAX_OUT = 4000
 
 
 def run_command(cmd: str, timeout: int = 5) -> str:
+    """
+    recebe o comando e o timeout (tempo limite de execução de código)
+    executa o comando e retorna o return do código exectado
+    """
     if not cmd.strip():
         return ""
 
-    process = subprocess.Popen(
+    process:subprocess.Popen = subprocess.Popen(
         ["/bin/sh", "-c", cmd],
         cwd=Path.home(),
         stdin=subprocess.DEVNULL,
