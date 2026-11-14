@@ -75,8 +75,11 @@ Simplismente a biblioteca `webbbrowser` abrindo seu navegador com `webbbrowser.o
 
 ## Próximos passos
 [ ] - Arquivo de configuração em `.toml` permitindo editar onde é feita a busca de arquivos
+
 [ ] - Inserir praticamente todo o cálculo I, II e III no parse, permitindo contas mais complexas
+
 [ ] - Uma execução de comandos mais aberta, permitindo sudo com abertura de um terminal pra validação do comando
+
 [ ] - Mostrar o resultado do cálculo com Latex.
 
 ## ybykûaba, do Tupi antigo.
