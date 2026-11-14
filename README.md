@@ -35,8 +35,26 @@ uv tool install .
 
 ## Uso
 
-```bash
-yby
-```
-- Associe esse comando a um atalho para abrir o ybykuaba de qualquer canto
+Basta instalar e associar o comando `yby` a um atalho do seu sistema, é recomendado o uso de `Super + espaço`, o propjeto inteiro só tem o comando `yby`, se quiser garantir que está funcionando antes de adiiconar um atalho, teste no terminal.
 
+| Prefixo | Função | Exemplo | Observações |
+| :-----: | ------ | ------- | ----------- |
+| *(nenhum)* | Busca arquivos e pastas | `relatorio` | Procura em `Documentos`, `Desktop`, `Downloads`, `Projetos`, `Músicas` e `Imagens`, independente do idioma do sistema |
+| `.` | Busca aplicativos | `.firefox` | O app precisa ter um arquivo `.desktop` para ser encontrado |
+| `:` | Executa comandos no terminal | `:ls -la` | Não funciona com `sudo` nem com comandos que abrem outros apps |
+| `=` | Calculadora | `=2**10` | Suporta `+`, `-`, `*`, `/`, `**` (potência) e `%` (resto). Também simplifica expressões: `=a**b+a**b` retorna `2*a**b` |
+| `?` | Busca na web | `?rust lifetimes` | Abre o navegador com a pesquisa no DuckDuckGo |
+
+## Sobre
+Como cada coisa funciona.
+### Busca de aplicativos, arquivos e pastas
+Existe um arquivo `.db` que é gerado em `~/.local/share/ybykuaba/`, ele contem as tabelas `files` e `applications`, guardando informações de apps, documentos e pastas, a pesquisa é feita com sqlite e o banco é sincronizado a cada abertura.
+
+### Execução de comandos
+Os comandos que você executa são chamados por `subprocess.Popen()` e encapsulados com `/bin/sh -c <seu_comando>`, com um timeout de execução, por isso não é recomendado o uso pra abertura de programas e processos demorados, serve mais pra informações, matar processos, criar e deletar pastas, etc.
+
+### Cálculos
+É usada a biblioteca [`sympy`](https://www.sympy.org/pt/index.html) para o calculo e o `ast` do python pra identificar cada operação, é feito um parse na string passada à janela e uma função circular processa essa expressão até retornar um objeto `sympy.Expr`, que é transformado em string e devolvido a janela.
+
+### busca na web
+Simplismente a biblioteca `webbbrowser` abrindo seu navegador com `webbbrowser.open` e a `urllib` ajustando sua string pra uma url.
