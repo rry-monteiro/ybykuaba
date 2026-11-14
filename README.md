@@ -45,6 +45,19 @@ Basta instalar e associar o comando `yby` a um atalho do seu sistema, é recomen
 | `=` | Calculadora | `=2**10` | Suporta `+`, `-`, `*`, `/`, `**` (potência) e `%` (resto). Também simplifica expressões: `=a**b+a**b` retorna `2*a**b` |
 | `?` | Busca na web | `?rust lifetimes` | Abre o navegador com a pesquisa no DuckDuckGo |
 
+
+## Imagens
+
+![app solto](./imgs/Captura%20de%20tela%20de%202026-11-14%2009-15-22.png)
+
+---
+
+![calculos](./imgs/Captura%20de%20tela%20de%202026-11-14%2009-16-24.png)
+
+---
+
+![execução de comandos](./imgs/Captura%20de%20tela%20de%202026-11-14%2009-17-05.png)
+
 ## Sobre
 Como cada coisa funciona.
 ### Busca de aplicativos, arquivos e pastas
